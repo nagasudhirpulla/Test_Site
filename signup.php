@@ -7,72 +7,78 @@
   $filled = true;
   $name = $email = $pass = $about = "";
   $nameErr = $emailErr = $passErr = "";
-  if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  	if(!empty($_POST['uname']))
-  	{
-  		$name = test_input($_POST['uname']);
-  		// check if name only contains letters and whitespace
-     if (!preg_match("/^[a-zA-Z ]*$/",$name)) {
+  if($_SERVER["REQUEST_METHOD"] == "POST") 
+  {
+    if(!empty($_POST['uname']))
+    {
+      $name = test_input($_POST['uname']);
+      // check if name only contains letters and whitespace
+      if (!preg_match("/^[a-zA-Z ]*$/",$name)) 
+      {
+        $filled = false;
        $nameErr = "Only letters and white space allowed"; 
      }
-  	}
-  	else
-  	{
-  		$nameErr = "Username Required";
-  	}
-  	if(!empty($_POST['uemail']))
-  	{
-  		$email = test_input($_POST['uemail']);
-  		// check if e-mail address syntax is valid
-     if (!preg_match("/([\w\-]+\@[\w\-]+\.[\w\-]+)/",$email)) {
-       $emailErr = "Invalid email format";
-  	}
-  	else
-  	{
-  		$emailErr = "Email Required";
-  	}
-  	if(!empty($_POST['upass']) && !empty($_POST['ucpass']))
-  	{
-  		if($_POST['upass'] == $_POST['ucpass'])
-  		{
-  			if(strlen($_POST['upass'])<=15)
-  			{
-  				$pass = "";
-  			}
-  			else
-  			{
-  				$pass = "";
-  				$passErr = "Password length should be below 16 characters";
-  			}
-
-  		}
-  		else
-  		{
-  			$pass = "";
-  			$passErr = "Passwords mismatch";
-  		}
-  	}
-  	else
-  	{
-  		$passErr = "Password Required";
-  	}
+   }
+   else{
+    $filled = false;
+    $nameErr = "Username Required";
   }
-
-  function test_input($data) {
-   $data = trim($data);
-   $data = stripslashes($data);
-   $data = htmlspecialchars($data);
-   return $data;
+  if(!empty($_POST['uemail']))
+  {
+    $email = test_input($_POST['uemail']);
+      // check if e-mail address syntax is valid
+    if (!preg_match("/([\w\-]+\@[\w\-]+\.[\w\-]+)/",$email)) 
+    {
+      $filled = false;
+      $emailErr = "Invalid email format";
+    }
+  }
+  else{
+    $filled = false;
+    $emailErr = "Email Required";
+  }
+  if(!empty($_POST['upass']) && !empty($_POST['ucpass']))
+  {
+    if($_POST['upass'] == $_POST['ucpass'])
+    {
+      if(strlen($_POST['upass'])<=15){
+        $pass = "";
+      }
+      else{
+        $pass = "";
+        $filled = false;
+        $passErr = "Password length should be below 16 characters";
+      }
+    }
+    else
+    {
+      $filled = false;
+     $pass = "";
+     $passErr = "Passwords mismatch";
+   }
+ }
+ else
+ {
+  $filled = false;
+  $passErr = "Password Required";
 }
-  ?>
-  <h1>Sign up Form<h1>
+}
+
+function test_input($data) {
+ $data = trim($data);
+ $data = stripslashes($data);
+ $data = htmlspecialchars($data);
+ return $data;
+}
+?>
+<h1>Sign up Form<h1>
   <form method = "post" action = "<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
     <table>
       <tr>
         <td><span style='font-size:1.2em;'>Username: </span></td>
         <td><input name ='uname' style="width:250px" type='text' <?php echo "value=$name"; ?>>
           <span style='font-size:0.6em;color:red;'>*<?php echo $nameErr; ?></span></td> 
-        </tr>
+        </tr> 
         <tr>
           <td><span style='font-size:1.2em;'>Email Address: </span></td>
           <td><input name ='uemail' style="width:250px"  type='text' <?php echo "value=$email"; ?>>
@@ -97,16 +103,13 @@
                 <td ><button type="submit" value="submit" style="font-size:1em;margin-left:2em">Sign Up</button></td>
               </tr>
             </table>
-          <form>
-          <h2>Feedback Form</h2>
-<?php
-// display form if user has not clicked submit
-if ($filled == true && !isset($_POST["submit"])) {
-  $date = date("d/m/Y");
-  //enter the signup time and details into the database
-  echo "<h2>Data entered into the database</h2>";
-  
-} 
-?>
-          </body>
-          </html>
+          </form>
+          <?php
+          if($_SERVER["REQUEST_METHOD"] == "POST" && $GLOBALS['filled'] == true)
+          {
+            echo "<h3>Account created on ".date("d/m/Y")."</h3>";
+          }
+
+          ?>
+        </body>
+        </html>
