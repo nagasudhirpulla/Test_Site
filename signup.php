@@ -4,6 +4,7 @@
 </head>
 <body>
   <?php
+  $filled = true;
   $name = $email = $pass = $about = "";
   $nameErr = $emailErr = $passErr = "";
   if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -100,10 +101,11 @@
           <h2>Feedback Form</h2>
 <?php
 // display form if user has not clicked submit
-if (!isset($_POST["submit"])) {
-  ?>
-  <h2>Data entered into the database</h2>
-  <?php 
+if ($filled == true && !isset($_POST["submit"])) {
+  $date = date("d/m/Y");
+  //enter the signup time and details into the database
+  echo "<h2>Data entered into the database</h2>"
+  
 } 
 ?>
           </body>
