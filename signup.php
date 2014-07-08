@@ -104,7 +104,7 @@
 if ($filled == true && !isset($_POST["submit"])) {
   $date = date("d/m/Y");
   //enter the signup time and details into the database
-  echo "<h2>Data entered into the database</h2>"
+  echo "<h2>Data entered into the database</h2>";
   
 } 
 ?>
