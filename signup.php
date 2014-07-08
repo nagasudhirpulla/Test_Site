@@ -96,7 +96,8 @@ function test_input($data) {
               </tr>
               <tr>
                 <td><span style='font-size:1.2em;'>About You: </span></td>
-                <td><textarea rows="4" style="width:250px;resize:none;" ><?php echo "$about"; ?></textarea></td> 
+                <td><textarea rows="4" style="width:250px;resize:none;" ><?php echo "$about"; ?></textarea>
+                  <span style='font-size:0.7em;color:red;'>Maximum of 500 characters</span></td> 
               </tr>
               <tr>
                 <td ></td>
@@ -108,6 +109,9 @@ function test_input($data) {
           if($_SERVER["REQUEST_METHOD"] == "POST" && $GLOBALS['filled'] == true)
           {
             echo "<h3>Account created on ".date("d/m/Y")."</h3>";
+            echo "<h3>Your Username is ".$name."</h3>";
+            echo "<h3>Your Email Id is ".$email."</h3>";
+            //create database connection to database Bullshit and upload into the table Customers with columns id, name, password, email, date, about
           }
 
           ?>
