@@ -102,7 +102,7 @@
 // display form if user has not clicked submit
 if (!isset($_POST["submit"])) {
   ?>
-  <h2>Data into the database</h2>
+  <h2>Data entered into the database</h2>
   <?php 
 } 
 ?>
