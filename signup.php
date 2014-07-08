@@ -6,9 +6,19 @@
   <?php
   $filled = true;
   $name = $email = $pass = $about = "";
-  $nameErr = $emailErr = $passErr = "";
+  $nameErr = $emailErr = $passErr = $genderErr = "";
   if($_SERVER["REQUEST_METHOD"] == "POST") 
   {
+    $about = $_POST['about'];
+    if(!empty($_POST['gender']))
+    {
+      $gender = test_input($_POST['gender']);
+    }
+    else
+    {
+      $filled = false;
+      $genderErr = "Gender is Required";
+    }
     if(!empty($_POST['uname']))
     {
       $name = test_input($_POST['uname']);
@@ -37,7 +47,7 @@
     $filled = false;
     $emailErr = "Email Required";
   }
-  if(!empty($_POST['upass']) && !empty($_POST['ucpass']))
+  if(!empty($_POST['upass']) || !empty($_POST['ucpass']))
   {
     if($_POST['upass'] == $_POST['ucpass'])
     {
@@ -53,8 +63,13 @@
     else
     {
       $filled = false;
+      $passErr = "Passwords mismatch";
+      if(empty($_POST['upass'])||empty($_POST['ucpass']))
+      {
+        $passErr = "Fill both the password fields";
+      }
      $pass = "";
-     $passErr = "Passwords mismatch";
+     
    }
  }
  else
@@ -76,12 +91,12 @@ function test_input($data) {
     <table>
       <tr>
         <td><span style='font-size:1.2em;'>Username: </span></td>
-        <td><input name ='uname' style="width:250px" type='text' <?php echo "value=$name"; ?>>
+        <td><input name ='uname' maxlength="50" style="width:250px" type='text' <?php echo "value=$name"; ?>>
           <span style='font-size:0.6em;color:red;'>*<?php echo $nameErr; ?></span></td> 
         </tr> 
         <tr>
           <td><span style='font-size:1.2em;'>Email Address: </span></td>
-          <td><input name ='uemail' style="width:250px"  type='text' <?php echo "value=$email"; ?>>
+          <td><input name ='uemail' maxlength="100" style="width:250px"  type='text' <?php echo "value=$email"; ?>>
             <span style='font-size:0.6em;color:red;'>*<?php echo $emailErr; ?></span></td> 
           </tr>
           <tr>
@@ -95,13 +110,23 @@ function test_input($data) {
                 <span style='font-size:0.6em;color:red;'>*<?php echo $passErr; ?></span></td> 
               </tr>
               <tr>
+                <td>
+                  <span style='font-size:1.2em;'>Gender: </span>
+                </td>
+                <td>
+                  <input style='font-size:1.2em;' type='radio' name='gender' value='Male' <?php if (isset($gender) && $gender=="Male") echo "checked";?>>Male
+                  <input style='font-size:1.2em;' type='radio' name='gender' value='Female' <?php if (isset($gender) && $gender=="Female") echo "checked";?>>Female
+                  <input style='font-size:1.2em;' type='radio' name='gender' value='Other' <?php if (isset($gender) && $gender=="Other") echo "checked";?>>Other
+                  <span style='font-size:0.6em;color:red;'>*<?php echo $genderErr; ?></span></td>
+                </td>
+              </tr>
+              <tr>
                 <td><span style='font-size:1.2em;'>About You: </span></td>
-                <td><textarea rows="4" style="width:250px;resize:none;" ><?php echo "$about"; ?></textarea>
+                <td><textarea maxlength="500" rows="4" style="width:250px;resize:none;" name="about" ><?php echo "$about"; ?></textarea>
                   <span style='font-size:0.7em;color:red;'>Maximum of 500 characters</span></td> 
               </tr>
               <tr>
-                <td ></td>
-                <td ><button type="submit" value="submit" style="font-size:1em;margin-left:2em">Sign Up</button></td>
+                <td colspan="2" align = "center"><button type="submit" value="submit" style="font-size:1em;" >Sign Up</button></td>
               </tr>
             </table>
           </form>
@@ -111,7 +136,10 @@ function test_input($data) {
             echo "<h3>Account created on ".date("d/m/Y")."</h3>";
             echo "<h3>Your Username is ".$name."</h3>";
             echo "<h3>Your Email Id is ".$email."</h3>";
+            $about = str_replace("\n", "<br>", $about);
+            echo "<h3> About You :<br> $about</h3>";
             //create database connection to database Bullshit and upload into the table Customers with columns id, name, password, email, date, about
+            
           }
 
           ?>
