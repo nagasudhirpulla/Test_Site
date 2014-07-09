@@ -90,28 +90,28 @@
   <form method = "post" action = "<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
     <table>
       <tr>
-        <td><span style='font-size:1.2em;'>Username: </span></td>
+        <td><span style='font-size:1.2em;'>Username </span></td>
         <td><input name ='uname' maxlength="50" style="width:250px" type='text' <?php echo "value=$name"; ?>>
           <span style='font-size:0.6em;color:red;'>*<?php echo $nameErr; ?></span></td> 
         </tr> 
         <tr>
-          <td><span style='font-size:1.2em;'>Email Address: </span></td>
+          <td><span style='font-size:1.2em;'>Email Address </span></td>
           <td><input name ='uemail' maxlength="100" style="width:250px"  type='text' <?php echo "value=$email"; ?>>
             <span style='font-size:0.6em;color:red;'>*<?php echo $emailErr; ?></span></td> 
           </tr>
           <tr>
-            <td><span style='font-size:1.2em;'>Enter Password: </span></td>
+            <td><span style='font-size:1.2em;'>Enter Password </span></td>
             <td><input name ='upass' style="width:250px"  type='password' <?php echo "value=$pass"; ?>>
               <span style='font-size:0.6em;color:red;'>*<?php echo $passErr; ?></span></td> 
             </tr>
             <tr>
-              <td><span style='font-size:1.2em;'>ReEnter Password: </span></td>
+              <td><span style='font-size:1.2em;'>ReEnter Password </span></td>
               <td><input name ='ucpass' style="width:250px"  type='password' <?php echo "value=$pass"; ?>>
                 <span style='font-size:0.6em;color:red;'>*<?php echo $passErr; ?></span></td> 
               </tr>
               <tr>
                 <td>
-                  <span style='font-size:1.2em;'>Gender: </span>
+                  <span style='font-size:1.2em;'>Gender </span>
                 </td>
                 <td>
                   <input style='font-size:1.2em;' type='radio' name='gender' value='Male' <?php if (isset($gender) && $gender=="Male") echo "checked";?>>Male
@@ -121,7 +121,7 @@
                 </td>
               </tr>
               <tr>
-                <td><span style='font-size:1.2em;'>About You: </span></td>
+                <td><span style='font-size:1.2em;'>About You </span></td>
                 <td><textarea maxlength="500" rows="4" style="width:250px;resize:none;" name="about" ><?php echo "$about"; ?></textarea>
                   <span style='font-size:0.7em;color:red;'>Maximum of 500 characters</span></td> 
                 </tr>
@@ -140,20 +140,7 @@
               echo "<h3>Your Email Id is ".$email."</h3>";
               $about = str_replace("\n", "<br>", $about);
               echo "<h3> About You :<br> $about</h3>";
-            //create database connection to database Bullshit and upload into the table Customers with columns id, name, password, email, date, about
-              $con=mysqli_connect("localhost","root","password123","bullshit");
-            // Check connection
-              if (mysqli_connect_errno()) {
-                echo "Failed to connect to MySQL: " . mysqli_connect_error();
-              }
-
-              $query = "INSERT INTO $table "."(`name`, `password`, `email`, `date1`, `about`) "."VALUES "."($name, $pass, $email, $date, $about)";
-
-              mysqli_query($con,$query);
-
-              mysqli_close($con);
             }
-
             ?>
           </body>
           </html>
