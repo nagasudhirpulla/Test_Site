@@ -23,10 +23,10 @@
     {
       $name = test_input($_POST['uname']);
       // check if name only contains letters and whitespace
-      if (!preg_match("/^[a-zA-Z ]*$/",$name)) 
+      if (!preg_match("/^[a-zA-Z0-9 ]*$/",$name)) 
       {
         $filled = false;
-        $nameErr = "Only letters and white space allowed"; 
+        $nameErr = "Only letters, numbers and white space allowed"; 
       }
     }
     else{
@@ -52,7 +52,7 @@
       if($_POST['upass'] == $_POST['ucpass'])
       {
         if(strlen($_POST['upass'])<=15){
-          $pass = "";
+          $pass = $_POST['upass'];
         }
         else{
           $pass = "";
@@ -90,28 +90,28 @@
   <form method = "post" action = "<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
     <table>
       <tr>
-        <td><span style='font-size:1.2em;'>Username </span></td>
+        <td><span style='font-size:1.2em;'>Username: </span></td>
         <td><input name ='uname' maxlength="50" style="width:250px" type='text' <?php echo "value=$name"; ?>>
           <span style='font-size:0.6em;color:red;'>*<?php echo $nameErr; ?></span></td> 
         </tr> 
         <tr>
-          <td><span style='font-size:1.2em;'>Email Address </span></td>
+          <td><span style='font-size:1.2em;'>Email Address: </span></td>
           <td><input name ='uemail' maxlength="100" style="width:250px"  type='text' <?php echo "value=$email"; ?>>
             <span style='font-size:0.6em;color:red;'>*<?php echo $emailErr; ?></span></td> 
           </tr>
           <tr>
-            <td><span style='font-size:1.2em;'>Enter Password </span></td>
-            <td><input name ='upass' style="width:250px"  type='password' <?php echo "value=$pass"; ?>>
+            <td><span style='font-size:1.2em;'>Enter Password: </span></td>
+            <td><input name ='upass' style="width:250px"  type='password'>
               <span style='font-size:0.6em;color:red;'>*<?php echo $passErr; ?></span></td> 
             </tr>
             <tr>
-              <td><span style='font-size:1.2em;'>ReEnter Password </span></td>
-              <td><input name ='ucpass' style="width:250px"  type='password' <?php echo "value=$pass"; ?>>
+              <td><span style='font-size:1.2em;'>ReEnter Password: </span></td>
+              <td><input name ='ucpass' style="width:250px"  type='password'>
                 <span style='font-size:0.6em;color:red;'>*<?php echo $passErr; ?></span></td> 
               </tr>
               <tr>
                 <td>
-                  <span style='font-size:1.2em;'>Gender </span>
+                  <span style='font-size:1.2em;'>Gender: </span>
                 </td>
                 <td>
                   <input style='font-size:1.2em;' type='radio' name='gender' value='Male' <?php if (isset($gender) && $gender=="Male") echo "checked";?>>Male
@@ -121,7 +121,7 @@
                 </td>
               </tr>
               <tr>
-                <td><span style='font-size:1.2em;'>About You </span></td>
+                <td><span style='font-size:1.2em;'>About You: </span></td>
                 <td><textarea maxlength="500" rows="4" style="width:250px;resize:none;" name="about" ><?php echo "$about"; ?></textarea>
                   <span style='font-size:0.7em;color:red;'>Maximum of 500 characters</span></td> 
                 </tr>
@@ -133,13 +133,36 @@
             <?php
             if($_SERVER["REQUEST_METHOD"] == "POST" && $GLOBALS['filled'] == true)
             {
-              $date = "gfkh";
-              $table = "customers";
-              echo "<h3>Account created on ".$date."</h3>";
+              $date = date("Y/m/d");
+            //create database connection to database Bullshit and upload into the table Customers with columns id, name, password, email, date, about
+              $dbname = "bullshit";
+              $table = "customers";            
+              $dbhost = 'localhost';
+              $dbuser = 'root';
+              $dbpass = 'password123';
+              $conn = mysql_connect($dbhost, $dbuser, $dbpass);
+              if(! $conn )
+              {
+                die('Could not connect: ' . mysql_error());
+              }
+              //echo 'Connected successfully';
+
+              $sql = "INSERT INTO `".$table."`(`name`, `password`, `email`, `date1`, `about`) VALUES ('".$name."','".$pass."','".$email."','".$date."','".$about."')";
+
+              mysql_select_db($dbname);
+              $retval = mysql_query( $sql, $conn );
+              if(! $retval )
+              {
+                //die('Could not enter data: ' . mysql_error());
+                die('This Email Id already exists, try another one');
+              }
+              mysql_close($conn);
+              echo "Congratulations!!! your account has been created :-)\n";
+              echo "<h3>Account created on ".substr($date, 8, 2)."/".substr($date, 5, 2)."/".substr($date, 0, 4)."</h3>";
               echo "<h3>Your Username is ".$name."</h3>";
               echo "<h3>Your Email Id is ".$email."</h3>";
               $about = str_replace("\n", "<br>", $about);
-              echo "<h3> About You :<br> $about</h3>";
+              echo "<h3> About You :<br> $about</h3>";              
             }
             ?>
           </body>
