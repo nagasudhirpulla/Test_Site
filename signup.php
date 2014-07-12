@@ -135,10 +135,10 @@
             {
               $date = date("Y/m/d");
             //create database connection to database Bullshit and upload into the table Customers with columns id, name, password, email, date, about
-              $dbname = "bullshit";
+              $dbname = "a3643009_bullshi";
               $table = "customers";            
-              $dbhost = 'localhost';
-              $dbuser = 'root';
+              $dbhost = 'mysql1.000webhost.com';
+              $dbuser = 'a3643009_root';
               $dbpass = 'password123';
               $conn = mysql_connect($dbhost, $dbuser, $dbpass);
               if(! $conn )
